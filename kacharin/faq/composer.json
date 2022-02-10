@@ -1,0 +1,21 @@
+{
+	"name": "kacharin/faq",
+	"description": "test",
+	"type": "yii2-extension",
+	"require": {
+				"yiisoft/yii2": "~2.0.0"
+				},
+	"license": "MIT",
+	"authors": [
+	{
+		"name": "kacharin",
+		"email": "a.kacharin5@gmail.com"
+	}
+	],
+	"minimum-stability": "dev",
+	"autoload": {
+	"psr-4": {
+	"kacharin\\faq\\": ""
+	}
+	}
+}
