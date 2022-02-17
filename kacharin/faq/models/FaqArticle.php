@@ -45,9 +45,9 @@ class FaqArticle extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'category_id' => 'Category ID',
-            'title' => 'Title',
-            'content' => 'Content',
+            'category_id' => 'Категория',
+            'title' => 'Заголовок',
+            'content' => 'Контент',
         ];
     }
 
@@ -56,8 +56,9 @@ class FaqArticle extends \yii\db\ActiveRecord
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getCategory()
+    public function getData()
     {
         return $this->hasOne(FaqCategory::className(), ['id' => 'category_id']);
     }
+
 }

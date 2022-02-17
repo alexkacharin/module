@@ -1,5 +1,6 @@
 <?php
 
+use app\kacharin\faq\models\FaqCategory;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\grid\ActionColumn;
@@ -31,7 +32,7 @@ $this->params['breadcrumbs'][] = $this->title;
             //'id',
            // 'parent_id',
             'title',
-			 
+
             [
                 'class' => ActionColumn::className(),
                 'urlCreator' => function ($action, FaqCategory $model, $key, $index, $column) {
