@@ -5,7 +5,7 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model app\kacharin\faq\models\FaqArticletocategory */
 
-$this->title = 'Create Faq Articletocategory';
+$this->title = 'Создание зависимости статей и категорий';
 $this->params['breadcrumbs'][] = ['label' => 'Faq Articletocategories', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>

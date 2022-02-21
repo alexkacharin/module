@@ -38,9 +38,9 @@ class FaqArticletocategory extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => 'ID',
-            'category_id' => 'Category ID',
-            'article_id' => 'Article ID',
+            'id' => 'id',
+            'category_id' => 'Номер категории',
+            'article_id' => 'Номер статьи',
         ];
     }
 }

@@ -10,7 +10,7 @@ use yii\grid\GridView;
 /* @var $searchModel app\kacharin\faq\models\search\FaqArticletocategorySearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Faq Articletocategories';
+$this->title = 'Зависимости статей от категорий';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="faq-articletocategory-index">
@@ -18,7 +18,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('Create Faq Articletocategory', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Создать зависимость', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>

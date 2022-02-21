@@ -1,12 +1,17 @@
-<div class="faq-default-index">
-    <h1><?= $this->context->action->uniqueId ?></h1>
-    <p>
-        This is the view content for action "<?= $this->context->action->id ?>".
-        The action belongs to the controller "<?= get_class($this->context) ?>"
-        in the "<?= $this->context->module->id ?>" module.
-    </p>
-    <p>
-        You may customize this page by editing the following file:<br>
-        <code><?= __FILE__ ?></code>
-    </p>
+<?php
+
+
+use yii\bootstrap4\Button;
+use yii\bootstrap4\Menu;
+use yii\bootstrap4\NavBar;
+use yii\widgets\Nav;
+use yii\helpers\Html;
+
+
+?>
+<div>
+
+    <?= Html::a('Article', ['/faq/article'], ['class'=>'btn btn-primary']) ?>
+    <?= Html::a('Category', ['/faq/category'], ['class'=>'btn btn-primary']) ?>
+    <?= Html::a('AricleToCategory', ['/faq/articletocategory'], ['class'=>'btn btn-primary']) ?>
 </div>

@@ -1,6 +1,8 @@
 <?php
 
 use app\kacharin\faq\models\FaqArticle;
+use app\kacharin\faq\models\FaqCategory;
+use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\grid\ActionColumn;
@@ -18,7 +20,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('Создать статью', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Создать новую статью', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
@@ -30,7 +32,8 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\SerialColumn'],
 
             //'id',
-            'category_id',
+            'category_id'=>'data.title',
+
             'title',
             'content:ntext',
             [
@@ -42,6 +45,7 @@ $this->params['breadcrumbs'][] = $this->title;
                  },
 				 
             ],
+
         ],
     ]); ?>
 

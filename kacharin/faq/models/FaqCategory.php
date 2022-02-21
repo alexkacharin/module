@@ -41,9 +41,9 @@ class FaqCategory extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => 'ID',
-            'parent_id' => 'Parent ID',
-            'title' => 'Title',
+            'id' => 'Номер категории',
+            'parent_id' => 'Родительская категория',
+            'title' => 'Название',
         ];
     }
 
@@ -56,4 +56,6 @@ class FaqCategory extends \yii\db\ActiveRecord
     {
         return $this->hasMany(FaqArticle::className(), ['category_id' => 'id']);
     }
+
+
 }

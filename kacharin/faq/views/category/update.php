@@ -5,7 +5,7 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model app\kacharin\faq\models\FaqCategory */
 
-$this->title = 'Update Faq Category: ' . $model->title;
+$this->title = 'Редактировать Категорию: ' . $model->title;
 $this->params['breadcrumbs'][] = ['label' => 'Faq Categories', 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->title, 'url' => ['view', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = 'Update';

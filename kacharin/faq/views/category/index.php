@@ -10,7 +10,7 @@ use yii\grid\GridView;
 /* @var $searchModel app\kacharin\faq\models\search\FaqCategorySearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Faq Categories';
+$this->title = 'Категории';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="faq-category-index">
@@ -18,7 +18,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('Create Faq Category', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Создать новую категорию', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
@@ -29,8 +29,8 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            //'id',
-           // 'parent_id',
+            'id',
+            'parent_id',
             'title',
 
             [
