@@ -55,7 +55,12 @@ $config = [
             'rules' => [
             ],
         ],
-        
+        'treeSettings' => [
+            'class' => 'dvizh\tree\TreeSettings',
+            'models' => [
+                '\dvizh\shop\models\Category' => [], //массив с настройками. Если не чего не передать, будут установлены дефолтные настройки. Все настроки описаны ниже.
+            ],
+        ],
     ],
 	
     'params' => $params,

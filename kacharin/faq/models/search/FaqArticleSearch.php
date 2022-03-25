@@ -17,7 +17,7 @@ class FaqArticleSearch extends FaqArticle
     public function rules()
     {
         return [
-            [['id', 'category_id'], 'integer'],
+            [['id'], 'integer'],
             [['title', 'content'], 'safe'],
         ];
     }
@@ -59,7 +59,7 @@ class FaqArticleSearch extends FaqArticle
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'category_id' => $this->category_id,
+
         ]);
 
         $query->andFilterWhere(['like', 'title', $this->title])

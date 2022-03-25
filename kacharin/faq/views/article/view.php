@@ -26,13 +26,14 @@ $this->params['breadcrumbs'][] = $this->title;
                 'method' => 'post',
             ],
         ]) ?>
+
     </p>
 
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
             'id',
-            'attribute' => 'data.title',
+            'Категории' => 'categoryList',
             'title',
             'content:ntext',
         ],

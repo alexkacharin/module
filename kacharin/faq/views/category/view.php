@@ -1,5 +1,6 @@
 <?php
 
+use app\kacharin\faq\models\FaqCategory;
 use yii\helpers\Html;
 use yii\widgets\DetailView;
 
@@ -30,7 +31,11 @@ $this->params['breadcrumbs'][] = $this->title;
         'model' => $model,
         'attributes' => [
             'id',
-            'parent_id',
+           ['label'=>'Родительская категория ',
+            'value' => function ($data) {
+                return FaqCategory::findOne(['id'=>$data->parent_id])->title;
+
+            },],
             'title',
         ],
     ]) ?>

@@ -12,7 +12,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="faq-category-create">
 
     <h1><?= Html::encode($this->title) ?></h1>
-
+    </div>
     <?= $this->render('_form', [
         'model' => $model,
     ]) ?>

@@ -14,6 +14,7 @@ use yii\grid\GridView;
 
 $this->title = 'Список статей';
 $this->params['breadcrumbs'][] = $this->title;
+$model = new FaqArticle();
 ?>
 <div class="faq-article-index">
 
@@ -23,17 +24,14 @@ $this->params['breadcrumbs'][] = $this->title;
         <?= Html::a('Создать новую статью', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
+
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-
-            //'id',
-            'category_id'=>'data.title',
-
+            'Категории' => 'categoryList',
             'title',
             'content:ntext',
             [

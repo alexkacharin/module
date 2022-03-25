@@ -3,7 +3,10 @@
 namespace app\kacharin\faq\controllers;
 
 use app\kacharin\faq\models\FaqArticle;
+use app\kacharin\faq\models\FaqCategory;
 use app\kacharin\faq\models\search\FaqArticleSearch;
+use Yii;
+use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -70,10 +73,13 @@ class ArticleController extends Controller
         $model = new FaqArticle();
 
         if ($this->request->isPost) {
-            if ($model->load($this->request->post()) && $model->save()) {
+            $model->category_ids =  Yii::$app->request->post('categories');
+            if ($model->load($this->request->post()) && $model->save(true)) {
                 return $this->redirect(['view', 'id' => $model->id]);
+
             }
         } else {
+
             $model->loadDefaultValues();
         }
 
@@ -93,10 +99,11 @@ class ArticleController extends Controller
     {
         $model = $this->findModel($id);
 
+        $parentIdList = Yii::$app->request->post('categories');
+        $model->category_ids =  $parentIdList;
         if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         }
-
         return $this->render('update', [
             'model' => $model,
         ]);
@@ -111,6 +118,8 @@ class ArticleController extends Controller
      */
     public function actionDelete($id)
     {
+        $model = $this->findModel($id);
+        $model->clearCurrentCategoryies();
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
@@ -131,4 +140,6 @@ class ArticleController extends Controller
 
         throw new NotFoundHttpException('The requested page does not exist.');
     }
+
+
 }

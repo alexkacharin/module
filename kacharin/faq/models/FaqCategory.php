@@ -3,6 +3,7 @@
 namespace app\kacharin\faq\models;
 
 use Yii;
+use yii\helpers\ArrayHelper;
 
 /**
  * This is the model class for table "faq_category".
@@ -43,7 +44,7 @@ class FaqCategory extends \yii\db\ActiveRecord
         return [
             'id' => 'Номер категории',
             'parent_id' => 'Родительская категория',
-            'title' => 'Название',
+            'title' => 'Категория',
         ];
     }
 
@@ -57,5 +58,91 @@ class FaqCategory extends \yii\db\ActiveRecord
         return $this->hasMany(FaqArticle::className(), ['category_id' => 'id']);
     }
 
+    public function getArticlies()
+    {
+        return $this->hasMany(FaqArticle::className(), ['id' => 'article_id'])
+            ->viaTable('faq_article_to_category', ['category_id' => 'id']);
+    }
+    public static function getAllCategories($parent = 0, $level = 0, $exclude = 0) {
+        $children = self::find()
+            ->where(['parent_id' => $parent])
+            ->asArray()
+            ->all();
+        $result = [];
+        foreach ($children as $category) {
+            // при выборе родителя категории нельзя допустить
+            // чтобы она размещалась внутри самой себя
+            if ($category['id'] == $exclude) {
+                continue;
+            }
+            if ($level) {
+                $category['title'] = str_repeat('— ', $level) . $category['title'];
+            }
+            $result[] = $category;
+            $result = array_merge(
+                $result,
+                self::getAllCategories($category['id'], $level+1, $exclude)
+            );
+        }
+        return $result;
+    }
 
+    /**
+     * Возвращает массив всех категорий каталога для возможности
+     * выбора родителя при добавлении или редактировании товара
+     * или категории
+     */
+    public static function getTree($exclude = 0, $root = false) {
+        $data = self::getAllCategories(0, 0, $exclude);
+        $tree = [];
+        // при выборе родителя категории можно выбрать значение «Без родителя»,
+        // т.е. создать категорию верхнего уровня, у которой не будет родителя
+        foreach ($data as $item) {
+            $tree[$item['id']] = $item['title'];
+        }
+        return $tree;
+    }
+    public function getChildren()
+    {
+        return $this->hasMany(self::className(),['parent_id' => 'id']);
+    }
+
+    public function getParent($parent = 0, $exclude = 0)
+    {
+        $children = self::find()
+        ->where(['parent_id' => $parent])
+        ->asArray()
+        ->all();
+        $result = [];
+        foreach ($children as $category) {
+            if ($category['id'] == $exclude) {
+                continue;
+            }
+            $result[] = $category['id'];
+            $result = array_merge(
+                $result,
+                self::getAllCategories($category['id'], $exclude)
+            );
+        }
+        $result = ArrayHelper::getColumn($result,'id');
+        return $result;
+    }
+    public function beforeDelete()
+    {
+        if (!parent::beforeDelete()) {
+            return false;
+        }
+        $arr = $this->getParent('id');
+        foreach ($arr as $arr_id) {
+            Yii::$app
+                ->db
+                ->createCommand()
+                ->delete('faq_category', ['id' => $arr_id])
+                ->execute();
+        }
+        return true;
+    }
 }
+
+
+

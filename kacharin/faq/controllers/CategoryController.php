@@ -2,8 +2,11 @@
 
 namespace app\kacharin\faq\controllers;
 
+use app\kacharin\faq\models\FaqArticle;
 use app\kacharin\faq\models\FaqCategory;
 use app\kacharin\faq\models\search\FaqCategorySearch;
+use Yii;
+use yii\base\BaseObject;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -44,6 +47,7 @@ class CategoryController extends Controller
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+
         ]);
     }
 
@@ -68,7 +72,6 @@ class CategoryController extends Controller
     public function actionCreate()
     {
         $model = new FaqCategory();
-
         if ($this->request->isPost) {
             if ($model->load($this->request->post()) && $model->save()) {
                 return $this->redirect(['view', 'id' => $model->id]);
@@ -111,9 +114,10 @@ class CategoryController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
-
-        return $this->redirect(['index']);
+            $model = new FaqCategory();
+            $this->findModel($id)->delete();
+            $model ->beforeDelete();
+            return $this->redirect(['index']);
     }
 
     /**
@@ -131,4 +135,10 @@ class CategoryController extends Controller
 
         throw new NotFoundHttpException('The requested page does not exist.');
     }
+    public function clearCurrentCategory($id)
+    {
+
+       // FaqCategory::deleteAll(['parent_id'=>$this->id]);
+    }
+
 }
