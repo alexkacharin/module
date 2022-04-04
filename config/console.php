@@ -16,6 +16,15 @@ $config = [
     'components' => [
         'cache' => [
             'class' => 'yii\caching\FileCache',
+
+        ],
+        'authManager' => [
+            'class' => 'yii\rbac\DbManager',
+
+        ],
+        'user' => [
+
+            'class' => 'yii\web\User'
         ],
         'log' => [
             'targets' => [

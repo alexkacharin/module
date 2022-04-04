@@ -2,6 +2,8 @@
 
 namespace app\kacharin\faq\controllers;
 
+use app\kacharin\faq\models\FaqArticle;
+use yii\data\Pagination;
 use yii\web\Controller;
 
 /**
@@ -15,6 +17,15 @@ class DefaultController extends Controller
      */
     public function actionIndex()
     {
-        return $this->render('index');
+        $articles = FaqArticle::find();
+        $pagination = new Pagination(['totalCount' => $articles->count()]);
+        $articles = $articles->offset($pagination->offset)
+            ->limit($pagination->limit)
+            ->all();
+
+        return $this->render('index', [
+            'articles' => $articles,
+            'pagination' => $pagination,
+        ]);
     }
 }

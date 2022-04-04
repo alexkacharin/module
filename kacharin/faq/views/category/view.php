@@ -33,6 +33,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'id',
            ['label'=>'Родительская категория ',
             'value' => function ($data) {
+                if ($data->parent_id!=null)
                 return FaqCategory::findOne(['id'=>$data->parent_id])->title;
 
             },],

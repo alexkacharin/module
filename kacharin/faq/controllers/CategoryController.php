@@ -2,11 +2,11 @@
 
 namespace app\kacharin\faq\controllers;
 
-use app\kacharin\faq\models\FaqArticle;
+
 use app\kacharin\faq\models\FaqCategory;
 use app\kacharin\faq\models\search\FaqCategorySearch;
-use Yii;
-use yii\base\BaseObject;
+
+use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -30,7 +30,16 @@ class CategoryController extends Controller
                         'delete' => ['POST'],
                     ],
                 ],
+                'access' => [
+                    'class' => AccessControl::class,
+                    'rules' => [
+                        [
+                            'roles' => ['admin','superadmin'], // Правило для admin и superadmin.
+                        ],
+                     ],
+                    ],
             ]
+
         );
     }
 

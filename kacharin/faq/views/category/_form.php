@@ -1,7 +1,6 @@
 <?php
 
 use app\kacharin\faq\models\FaqCategory;
-use dvizh\tree\widgets\Tree;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
@@ -23,7 +22,8 @@ use yii\widgets\ActiveForm;
         $exclude = $model->id;
     }
     $parents = $model::getTree($exclude, true);
-    echo $form->field($model, 'parent_id')->dropDownList($parents);
+
+    echo $form->field($model, 'parent_id')->dropDownList([null => 'Родительская категория',$parents])
     ?>
 
 

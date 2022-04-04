@@ -11,7 +11,7 @@ class Module extends \yii\base\Module
      * {@inheritdoc}
      */
     public $controllerNamespace = 'app\kacharin\faq\controllers';
-
+    public $accessRoles = ['admin', 'superadmin'];
     /**
      * {@inheritdoc}
      */

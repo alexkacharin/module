@@ -2,6 +2,7 @@
 
 namespace app\kacharin\faq\models;
 
+use phpDocumentor\Reflection\Types\Integer;
 use Yii;
 use yii\helpers\ArrayHelper;
 
@@ -30,7 +31,8 @@ class FaqCategory extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['parent_id'], 'integer'],
+            [['parent_id'],'integer',],
+            [['parent_id'],'default', 'value' => null],
             [['title'], 'required'],
             [['title'], 'string', 'max' => 255],
         ];
@@ -63,7 +65,7 @@ class FaqCategory extends \yii\db\ActiveRecord
         return $this->hasMany(FaqArticle::className(), ['id' => 'article_id'])
             ->viaTable('faq_article_to_category', ['category_id' => 'id']);
     }
-    public static function getAllCategories($parent = 0, $level = 0, $exclude = 0) {
+    public static function getAllCategories($parent = NULL, $level = 0, $exclude = 0) {
         $children = self::find()
             ->where(['parent_id' => $parent])
             ->asArray()
@@ -93,7 +95,7 @@ class FaqCategory extends \yii\db\ActiveRecord
      * или категории
      */
     public static function getTree($exclude = 0, $root = false) {
-        $data = self::getAllCategories(0, 0, $exclude);
+        $data = self::getAllCategories(null, 0, $exclude);
         $tree = [];
         // при выборе родителя категории можно выбрать значение «Без родителя»,
         // т.е. создать категорию верхнего уровня, у которой не будет родителя

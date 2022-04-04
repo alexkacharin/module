@@ -21,7 +21,8 @@
         "kacharin/faq": "dev-master",
         "pistol88/yii2-tree": "*",
         "kartik-v/yii2-widget-select2": "dev-master",
-        "delikates-nsk/yii2-shadowed-tabs": "@dev"
+        "delikates-nsk/yii2-shadowed-tabs": "@dev",
+        "mdmsoft/yii2-admin": "~2.0"
       
     },
     "require-dev": {
