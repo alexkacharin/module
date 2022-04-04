@@ -19,25 +19,7 @@ class m220217_161055_create_faq_article_table extends Migration
             'id' => $this->primaryKey(),
             'title' => $this->string(255)->notNull(),
             'content' => $this->text()->notNull(),
-            'category_id' => $this->integer()->notNull(),
         ]);
-
-        // creates index for column `category_id`
-        $this->createIndex(
-            '{{%idx-faq_article-category_id}}',
-            '{{%faq_article}}',
-            'category_id'
-        );
-
-        // add foreign key for table `{{%faq_category}}`
-        $this->addForeignKey(
-            '{{%fk-faq_article-category_id}}',
-            '{{%faq_article}}',
-            'category_id',
-            '{{%faq_category}}',
-            'id',
-            'CASCADE'
-        );
     }
 
     /**
@@ -45,18 +27,6 @@ class m220217_161055_create_faq_article_table extends Migration
      */
     public function safeDown()
     {
-        // drops foreign key for table `{{%faq_category}}`
-        $this->dropForeignKey(
-            '{{%fk-faq_article-category_id}}',
-            '{{%faq_article}}'
-        );
-
-        // drops index for column `category_id`
-        $this->dropIndex(
-            '{{%idx-faq_article-category_id}}',
-            '{{%faq_article}}'
-        );
-
         $this->dropTable('{{%faq_article}}');
     }
 }
