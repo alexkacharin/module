@@ -1,5 +1,6 @@
 <?php
 
+use mihaildev\ckeditor\CKEditor;
 use yii\helpers\Html;
 
 /* @var $this yii\web\View */

@@ -50,7 +50,6 @@ $config = [
             ],
         ],
         'db' => $db,
-       
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
@@ -64,7 +63,16 @@ $config = [
             ],
         ],
     ],
-
+    'controllerMap' => [
+        'elfinder' => [
+            'class' => 'mihaildev\elfinder\PathController',
+            'access' => ['@'],
+            'root' => [
+                'path' => 'uploads',
+                'name' => 'Files'
+            ],
+        ]
+    ],
     'params' => $params,
 ];
 

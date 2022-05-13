@@ -15,14 +15,11 @@ use yii\widgets\ActiveForm;
     <?php $form = ActiveForm::begin(); ?>
     <?= $form->field($model, 'title')->textInput(['maxlength' => true]); ?>
     <?php
-    // при редактировании существующей категории нельзя допустить, чтобы
-    // в качестве родителя была выбрана эта же категория или ее потомок
     $exclude = 0;
     if (!empty($model->id)) {
         $exclude = $model->id;
     }
     $parents = $model::getTree($exclude, true);
-
     echo $form->field($model, 'parent_id')->dropDownList([null => 'Родительская категория',$parents])
     ?>
 

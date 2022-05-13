@@ -30,14 +30,14 @@ class CategoryController extends Controller
                         'delete' => ['POST'],
                     ],
                 ],
-                'access' => [
+                /*'access' => [
                     'class' => AccessControl::class,
                     'rules' => [
                         [
                             'roles' => ['admin','superadmin'], // Правило для admin и superadmin.
                         ],
                      ],
-                    ],
+                    ],*/
             ]
 
         );

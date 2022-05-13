@@ -1,0 +1,7 @@
+.sub-list {
+    display: none;
+}
+
+.sub-list.open {
+    display: block;
+}

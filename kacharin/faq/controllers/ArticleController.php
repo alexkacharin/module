@@ -6,6 +6,8 @@ use app\kacharin\faq\models\FaqArticle;
 use app\kacharin\faq\models\FaqCategory;
 use app\kacharin\faq\models\search\FaqArticleSearch;
 use Yii;
+use yii\base\BaseObject;
+use yii\data\Pagination;
 use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -43,10 +45,11 @@ class ArticleController extends Controller
     {
         $searchModel = new FaqArticleSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
-
+        $pagination = 3;
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'pagination' => $pagination,
         ]);
     }
 
@@ -98,7 +101,6 @@ class ArticleController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-
         $parentIdList = Yii::$app->request->post('categories');
         $model->category_ids =  $parentIdList;
         if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
@@ -141,5 +143,22 @@ class ArticleController extends Controller
         throw new NotFoundHttpException('The requested page does not exist.');
     }
 
+    public function actionUpdateStatus($id) {
+        $model =  FaqArticle::find()->where(['id' => $id])->one();
+        $parentIdList = $model-> getCategoryies()->select('id')->asArray()->all();
+        $model->category_ids =  $parentIdList;
+        if ($model->status == 0) $model->status = 1;
+        else $model->status = 0;
+        $model->save();
+        $articles = FaqArticle::find()->where(['status' => 1]);
+        $pagination = new Pagination(['totalCount' => $articles->count(), 'pageSize' => 10,'forcePageParam' => false, 'pageSizeParam' => false]);
+        $articles = $articles->offset($pagination->offset)
+            ->limit($pagination->limit)
+            ->all();
 
+        return $this->render('../default/index', [
+            'articles' => $articles,
+            'pagination' => $pagination,
+        ]);
+    }
 }

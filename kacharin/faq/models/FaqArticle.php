@@ -3,6 +3,8 @@
 namespace app\kacharin\faq\models;
 
 use Yii;
+use yii\data\Pagination;
+use yii\db\Query;
 use yii\helpers\ArrayHelper;
 
 /**
@@ -49,6 +51,7 @@ class FaqArticle extends \yii\db\ActiveRecord
             'id' => 'ID',
             'title' => 'Заголовок',
             'content' => 'Контент',
+            'CategoryList' => 'Категории'
         ];
     }
 
@@ -91,6 +94,7 @@ class FaqArticle extends \yii\db\ActiveRecord
 
             }
         }
+
     }
     public function getCategoryArr()
     {
@@ -160,6 +164,32 @@ public function getArrays($array, $sub = 0)
 
         }
 
+    }
+    public function getSearchResult($search)
+    {
+        $array = [];
+        $query = self::find()->where(['like', 'title', $search])->all();
+            foreach ($query as $r) {
+                array_push($array, $r->id);
+            }
+
+
+    return $array;
+    }
+
+
+    /**
+     * Вспомогательная функция, очищает строку поискового запроса с сайта
+     * от всякого мусора
+     */
+    protected function cleanSearchString($search) {
+        $search = iconv_substr($search, 0, 64);
+        // удаляем все, кроме букв и цифр
+        $search = preg_replace('#[^0-9a-zA-ZА-Яа-яёЁ]#u', ' ', $search);
+        // сжимаем двойные пробелы
+        $search = preg_replace('#\s+#u', ' ', $search);
+        $search = trim($search);
+        return $search;
     }
 
 

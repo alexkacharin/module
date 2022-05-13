@@ -88,7 +88,29 @@ class FaqCategory extends \yii\db\ActiveRecord
         }
         return $result;
     }
-
+    public static function getAllCategoryMeny($parent = NULL, $level = 0, $exclude = 0) {
+        $children = self::find()
+            ->where(['parent_id' => $parent])
+            ->asArray()
+            ->all();
+        $result = [];
+        foreach ($children as $category) {
+            // при выборе родителя категории нельзя допустить
+            // чтобы она размещалась внутри самой себя
+            if ($category['id'] == $exclude) {
+                continue;
+            }
+            if ($level) {
+                $category['parent_id'] = $level;
+            }
+            $result[] = $category;
+            $result = array_merge(
+                $result,
+                self::getAllCategoryMeny($category['id'], $level +  1, $exclude)
+            );
+        }
+        return $result;
+    }
     /**
      * Возвращает массив всех категорий каталога для возможности
      * выбора родителя при добавлении или редактировании товара
@@ -143,6 +165,42 @@ class FaqCategory extends \yii\db\ActiveRecord
                 ->execute();
         }
         return true;
+    }
+    public static function buildArray($items, $currentElementId = 0, $idKeyname = 'id', $parentIdKeyname = 'parent_id', $parentarrayName = 'childs')
+    {
+        if(empty($items)) return array();
+        $return = [];
+        foreach($items as $item) {
+            if($item[$parentIdKeyname] == $currentElementId) {
+                $item[$parentarrayName] = self::buildArray($items, $item[$idKeyname], $idKeyname, $parentIdKeyname, $parentarrayName);
+                $return[] = $item;
+            }
+        }
+        return $return;
+    }
+    public static function treeBuild($items)
+    {
+        $return = '';
+        foreach($items as $item) {
+            if (empty($item['parent_id'])) {
+                $return .= '<ul class="list">';
+                $return .= '<li>';
+                $return .= $item['title'];
+                $return .= FaqCategory::treeBuild($item['childs']);
+                $return .= '</li>';
+                $return .= '</ul>';
+            }
+            else{
+                $return .= '<ul class="sub-list">';
+                $return .= '<li>';
+                $return .= $item['title'];
+                $return .= FaqCategory::treeBuild($item['childs']);
+                $return .= '</li>';
+                $return .= '</ul>';
+            }
+
+        }
+        return $return;
     }
 }
 

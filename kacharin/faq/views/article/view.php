@@ -4,12 +4,13 @@ use app\kacharin\faq\models\FaqCategory;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\widgets\DetailView;
+use mihaildev\ckeditor\CKEditor;
 
 /* @var $this yii\web\View */
 /* @var $model app\kacharin\faq\models\FaqArticle */
 
 $this->title = $model->title;
-$this->params['breadcrumbs'][] = ['label' => 'Faq Articles', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'Статьи', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
 ?>
@@ -26,17 +27,18 @@ $this->params['breadcrumbs'][] = $this->title;
                 'method' => 'post',
             ],
         ]) ?>
+        <?= Html::a('Отправить статью в архив', ['/faq/article/update-status', 'id' =>$model->id], [
+            'class' => 'btn btn-danger',
+            'data' => [
+                'confirm' => 'Вы действительно хотите отправить статью в архив?',
+                'method' => 'post',
+            ],
+        ]) ?>
 
     </p>
 
-    <?= DetailView::widget([
-        'model' => $model,
-        'attributes' => [
-            'id',
-            'Категории' => 'categoryList',
-            'title',
-            'content:ntext',
-        ],
-    ]) ?>
+    <?=
+            $model->content;
+   ?>
 
 </div>

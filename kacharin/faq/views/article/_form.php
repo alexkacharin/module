@@ -6,10 +6,12 @@ use app\kacharin\faq\models\FaqArticle;
 use app\kacharin\faq\models\FaqCategory;
 
 use kartik\select2\Select2;
+use mihaildev\ckeditor\CKEditor;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-
+use mihaildev\elfinder\InputFile;
+use mihaildev\elfinder\ElFinder;
 //$form->field($model, 'category_id')->dropDownList($items, $params)
 /* @var $this yii\web\View */
 /* @var $model app\kacharin\faq\models\FaqArticle */
@@ -32,10 +34,17 @@ $selectedCategories = $model->getSelectCategoryies();
 
 ?>
 <?= Html::dropDownList('categories',$selectedCategories,$parents,['class'=>'form-control','multiple'=>true])?>
+<?= $form->field($model, 'title')->textarea(['rows' => 1]) ?>
+<?=
 
+$form->field($model, 'content')->widget(CKEditor::className(), [
+    'editorOptions' => ElFinder::ckeditorOptions('elfinder',[
+            'preset' => 'full', //разработанны стандартные настройки basic, standard, full данную возможность не обязательно использовать
+            'inline' => false,
+        ]),
+])
+?>
 
-    <?= $form->field($model, 'title')->textarea(['rows' => 1]) ?>
-    <?= $form->field($model, 'content')->textarea(['rows' => 6]) ?>
 
 
     <div class="form-group">

@@ -1,13 +1,12 @@
 <?php
 
 $config = [
-    'components' => [
 
-        '' => [
-            'class' => 'yii\caching\FileCache',
-        ]
+'rules' => [
+    'post/page/<page:\d+>' => 'post/index',
+    'post/' => 'post/index',
+],
 
-]
 ];
 
 
