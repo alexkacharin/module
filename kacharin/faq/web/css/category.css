@@ -1,7 +1,48 @@
 .sub-list {
     display: none;
+    transition: max-height 1s ease-out;
 }
 
 .sub-list.open {
     display: block;
 }
+.main-list ul {
+    counter-reset: li;
+    margin: 0;
+    font-family: 'Didact Gothic', sans-serif;
+
+    /*подключаем через Google Web Fonts*/
+}
+.main-list li:before {
+    counter-increment: li;
+    content: counters(li, ".") ". ";
+    padding: 5px 0;
+    display: inline-block;
+    margin-right: 5px;
+    border-radius: 3px;
+    color: white;
+    text-align: center;
+    width: 50px;
+    transition: .4s linear;
+
+}
+.main-list a {
+    display: inline-block;
+    padding: 5px;
+    text-decoration: none;
+    color: #716B65;
+    margin: 5px 0;
+}
+.main-list>li:before {
+    background: #2D5957;
+}
+.main-list>li:hover:before {
+    background: #112221;
+}
+.sub-list>li:before {
+    background: #3AA898;
+}
+.sub-list>li:hover:before {
+    background: #215f56;
+}
+

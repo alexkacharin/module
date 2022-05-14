@@ -183,18 +183,28 @@ class FaqCategory extends \yii\db\ActiveRecord
         $return = '';
         foreach($items as $item) {
             if (empty($item['parent_id'])) {
-                $return .= '<ul class="list">';
+                $return .= '<ul class="main-list" style="list-style-type:none;">';
                 $return .= '<li>';
+                $return .= '<a href="';
+                $return .= 'default/category?id='.$item['id'];
+                $return .= '">';
                 $return .= $item['title'];
+                $return .= '</a>';
                 $return .= FaqCategory::treeBuild($item['childs']);
+
                 $return .= '</li>';
                 $return .= '</ul>';
             }
             else{
-                $return .= '<ul class="sub-list">';
-                $return .= '<li>';
+                $return .= '<ul class="sub-list ">';
+                $return .= '<li style="list-style-type:none;">';
+                $return .= '<a href="';
+                $return .= 'default/category?id='.$item['id'];
+                $return .= '">';
                 $return .= $item['title'];
+                $return .= '</a>';
                 $return .= FaqCategory::treeBuild($item['childs']);
+
                 $return .= '</li>';
                 $return .= '</ul>';
             }

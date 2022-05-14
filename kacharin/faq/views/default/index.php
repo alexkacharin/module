@@ -39,7 +39,7 @@ use yii\bootstrap4\ActiveForm;
     <body>
     <?php
     $this->registerJs(
-        "$('.list li').on('click', function(e) {
+        "$('.main-list li').on('click', function(e) {
     e.stopPropagation();
     var subList = $(this).children('.sub-list');
 
@@ -48,7 +48,8 @@ use yii\bootstrap4\ActiveForm;
     } else {
         subList.addClass('open');
     }
-    });", View::POS_READY,
+    });
+    ", View::POS_READY,
         'my-button-handler'
     );
     ?>
