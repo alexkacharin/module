@@ -5,6 +5,7 @@ namespace app\kacharin\faq\models;
 use phpDocumentor\Reflection\Types\Integer;
 use Yii;
 use yii\helpers\ArrayHelper;
+use yii\helpers\Url;
 
 /**
  * This is the model class for table "faq_category".
@@ -186,7 +187,8 @@ class FaqCategory extends \yii\db\ActiveRecord
                 $return .= '<ul class="main-list" style="list-style-type:none;">';
                 $return .= '<li>';
                 $return .= '<a href="';
-                $return .= 'default/category?id='.$item['id'];
+
+                $return .= Url::to(['default/category?id='.$item['id'].'.']);
                 $return .= '">';
                 $return .= $item['title'];
                 $return .= '</a>';
@@ -199,7 +201,7 @@ class FaqCategory extends \yii\db\ActiveRecord
                 $return .= '<ul class="sub-list ">';
                 $return .= '<li style="list-style-type:none;">';
                 $return .= '<a href="';
-                $return .= 'default/category?id='.$item['id'];
+                $return .= Url::to(['default/category?id='.$item['id'].'.']);
                 $return .= '">';
                 $return .= $item['title'];
                 $return .= '</a>';

@@ -34,7 +34,9 @@ use yii\bootstrap4\ActiveForm;
     $list = $model::find()->asArray()->all();
     $arr = $model::buildArray($list);
     $arr = $model::treeBuild($arr);
+    echo "<div class='container'>";
     print_r($arr);
+    echo "</div>";
     ?>
     <body>
     <?php
@@ -53,7 +55,7 @@ use yii\bootstrap4\ActiveForm;
         'my-button-handler'
     );
     ?>
-    <div class="col-sm-6">
+    <div class="container">
         <form method="get" action="<?= Url::to(['default/search']); ?>" class="pull-right">
             <div class="input-group">
                 <input type="text" name="query" class="form-control" placeholder="Поиск по статьям">
@@ -67,6 +69,7 @@ use yii\bootstrap4\ActiveForm;
             </div>
         </form>
     </div>
+    <div class="container">
      <?php foreach($articles as $article):?>
            <article class="post">
 
@@ -149,6 +152,7 @@ use yii\bootstrap4\ActiveForm;
                ]);
                ?>
 
-
+           </article>
+    </div>
     </body>
 </div>
