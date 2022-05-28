@@ -188,7 +188,7 @@ class FaqCategory extends \yii\db\ActiveRecord
                 $return .= '<li>';
                 $return .= '<a href="';
 
-                $return .= Url::to(['default/category?id='.$item['id'].'.']);
+                $return .= Url::to(['/faq/article/category?id='.$item['id'].'.']);
                 $return .= '">';
                 $return .= $item['title'];
                 $return .= '</a>';
@@ -201,7 +201,7 @@ class FaqCategory extends \yii\db\ActiveRecord
                 $return .= '<ul class="sub-list ">';
                 $return .= '<li style="list-style-type:none;">';
                 $return .= '<a href="';
-                $return .= Url::to(['default/category?id='.$item['id'].'.']);
+                $return .= Url::to(['/faq/article/category?id='.$item['id'].'.']);
                 $return .= '">';
                 $return .= $item['title'];
                 $return .= '</a>';

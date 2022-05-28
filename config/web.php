@@ -15,6 +15,10 @@ $config = [
         'faq' => [
             'class' => 'app\kacharin\faq\Module',
         ],
+        'user' => [
+            'class' => 'dektrium\user\Module',
+        ],
+        'rbac' => 'dektrium\rbac\RbacWebModule',
     ],
     'components' => [
 

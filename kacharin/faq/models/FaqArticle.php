@@ -3,6 +3,7 @@
 namespace app\kacharin\faq\models;
 
 use Yii;
+use yii\base\BaseObject;
 use yii\data\Pagination;
 use yii\db\Query;
 use yii\helpers\ArrayHelper;
@@ -65,21 +66,21 @@ class FaqArticle extends \yii\db\ActiveRecord
         return $this->hasOne(FaqCategory::className(), ['id' => 'category_id']);
     }
 
-    public function getCategoryies()
+    public function getCategories()
     {
         return $this->hasMany(FaqCategory::className(), ['id' => 'category_id'])
-            ->viaTable('faq_article_to_category', ['article_id' => 'id']);
+            ->viaTable('faq_article_to_faq_categories', ['article_id' => 'id']);
     }
     public function getCategoryList()
     {
-        $selectCategoryies = $this -> getCategoryies()->select('title')->asArray()->all();
+        $selectCategoryies = $this -> getCategories()->select('title')->asArray()->all();
         $array = ArrayHelper::getColumn($selectCategoryies,'title');
         $array = implode(', ', $array);
         return $array;
     }
     public function getSelectCategoryies()
     {
-       $selectCategoryies = $this -> getCategoryies()->select('id')->asArray()->all();
+       $selectCategoryies = $this -> getCategories()->select('id')->asArray()->all();
         return ArrayHelper::getColumn($selectCategoryies,'id');
     }
     public function saveCategories($categories)
@@ -96,15 +97,16 @@ class FaqArticle extends \yii\db\ActiveRecord
         }
 
     }
+    /*
     public function getCategoryArr()
     {
         $arr = FaqCategory::find()->asArray()->all();
         return $arr;
-    }
+    }*/
     
     public function clearCurrentCategoryies()
     {
-        FaqArticletocategory::deleteAll(['article_id'=>$this->id]);
+     Yii::$app->db->createCommand(' DELETE FROM faq_article_to_faq_categories WHERE article_id = :id',['id' => $this->id])->queryAll();
     }
 
 
@@ -160,7 +162,7 @@ public function getArrays($array, $sub = 0)
           foreach($this->category_ids as $category_id)
         {
             $category = FaqCategory::findOne($category_id);
-            $this->link('categoryies',$category);
+            $this->link('categories',$category);
 
         }
 

@@ -5,9 +5,12 @@ namespace app\kacharin\faq\controllers;
 use app\kacharin\faq\models\FaqArticle;
 use app\kacharin\faq\models\FaqCategory;
 use app\kacharin\faq\models\search\FaqArticleSearch;
+use app\kacharin\faq\Module;
+use app\kacharin\faq\widgets\faqWidget\FaqWidget;
 use Yii;
 use yii\base\BaseObject;
 use yii\data\Pagination;
+use yii\filters\AccessControl;
 use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -23,17 +26,22 @@ class ArticleController extends Controller
      */
     public function behaviors()
     {
-        return array_merge(
-            parent::behaviors(),
-            [
-                'verbs' => [
-                    'class' => VerbFilter::className(),
-                    'actions' => [
-                        'delete' => ['POST'],
+        return [
+            'access' => [
+                'class' => AccessControl::class,
+                'only' => ['index','create','update','delete','update-status'],
+                'denyCallback' => function () {
+                    die('Доступ запрещен!');
+                },
+                'rules' => [
+                    [
+                        'allow'   => true,
+                        'roles'   => Module::accessRoles,
                     ],
                 ],
-            ]
-        );
+            ],
+        ];
+
     }
 
     /**
@@ -41,8 +49,10 @@ class ArticleController extends Controller
      *
      * @return string
      */
+
     public function actionIndex()
     {
+
         $searchModel = new FaqArticleSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
         $pagination = 3;
@@ -143,22 +153,57 @@ class ArticleController extends Controller
         throw new NotFoundHttpException('The requested page does not exist.');
     }
 
-    public function actionUpdateStatus($id) {
+    public function actionUpdateStatus($id,$url) {
         $model =  FaqArticle::find()->where(['id' => $id])->one();
-        $parentIdList = $model-> getCategoryies()->select('id')->asArray()->all();
+        $parentIdList = $model-> getCategories()->select('id')->asArray()->all();
         $model->category_ids =  $parentIdList;
         if ($model->status == 0) $model->status = 1;
         else $model->status = 0;
         $model->save();
-        $articles = FaqArticle::find()->where(['status' => 1]);
+        return $this->redirect($url);
+    }
+    public function actionArchive()
+    {
+        $articles = FaqArticle::find()->where(['status' => 0]);
         $pagination = new Pagination(['totalCount' => $articles->count(), 'pageSize' => 10,'forcePageParam' => false, 'pageSizeParam' => false]);
         $articles = $articles->offset($pagination->offset)
             ->limit($pagination->limit)
             ->all();
 
-        return $this->render('../default/index', [
+        return $this->render('archive', [
             'articles' => $articles,
             'pagination' => $pagination,
         ]);
+    }
+    /* ... */
+
+    /**
+     * Результаты поиска по каталогу товаров
+     */
+    public function actionSearch($query = '') {
+        $array = (new FaqArticle())->getSearchResult($query);
+        $articles = FaqArticle::findAll($array);
+        $pagination = new Pagination(['totalCount' => count($articles)]);
+        return $this->render('../../widgets/faqWidget/views/index', [
+            'articles' => $articles,
+            'pagination' => $pagination,
+        ]);
+    }
+
+    public function actionCategory($id) {
+        $array = Yii::$app->db->createCommand('SELECT * FROM faq_article_to_faq_categories WHERE category_id = :id',['id' => $id])->queryAll();
+        $result = ArrayHelper::getColumn($array,'article_id');
+        $articles = FaqArticle::findAll($result);
+        $pagination = new Pagination(['totalCount' => count($articles)]);
+        Yii::$app->view->params['customParam'] = 'customValue';
+         return $this->render('../../widgets/faqWidget/views/index', [
+             'articles' => $articles,
+             'pagination' => $pagination,
+         ]);
+
+    }
+    public function actionDeleted($id,$url) {
+        Yii::$app->db->createCommand('DELETE FROM faq_article WHERE id = :id',['id' => $id])->queryAll();
+        return $this->redirect($url);
     }
 }

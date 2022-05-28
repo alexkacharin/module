@@ -4,6 +4,8 @@
 /* @var $form yii\bootstrap4\ActiveForm */
 /* @var $model app\models\ContactForm */
 
+use app\kacharin\faq\models\FaqArticle;
+use app\kacharin\faq\widgets\faqWidget\FaqWidget;
 use yii\bootstrap4\ActiveForm;
 use yii\bootstrap4\Html;
 use yii\captcha\Captcha;
@@ -66,3 +68,5 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?php endif; ?>
 </div>
+<?php $someModel =  FaqArticle::find()->where(['status' => 1])?>
+<?= FaqWidget::widget(['articles' => $someModel]) ?>

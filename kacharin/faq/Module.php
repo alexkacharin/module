@@ -2,6 +2,8 @@
 
 namespace app\kacharin\faq;
 
+use Yii;
+
 /**
  * faq module definition class
  */
@@ -11,7 +13,7 @@ class Module extends \yii\base\Module
      * {@inheritdoc}
      */
     public $controllerNamespace = 'app\kacharin\faq\controllers';
-    public $accessRoles = ['admin', 'superadmin'];
+    const accessRoles = ['admin', 'superadmin'];
     /**
      * {@inheritdoc}
      */
@@ -19,6 +21,6 @@ class Module extends \yii\base\Module
     {
         parent::init();
 
-      //  \Yii::configure($this, require __DIR__ . '/config/main.php');
+      //Yii::configure($this, require __DIR__ . '\config\web.php');
     }
 }

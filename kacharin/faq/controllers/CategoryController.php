@@ -6,6 +6,7 @@ namespace app\kacharin\faq\controllers;
 use app\kacharin\faq\models\FaqCategory;
 use app\kacharin\faq\models\search\FaqCategorySearch;
 
+use app\kacharin\faq\Module;
 use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -21,26 +22,21 @@ class CategoryController extends Controller
      */
     public function behaviors()
     {
-        return array_merge(
-            parent::behaviors(),
-            [
-                'verbs' => [
-                    'class' => VerbFilter::className(),
-                    'actions' => [
-                        'delete' => ['POST'],
+        return [
+            'access' => [
+                'class' => AccessControl::class,
+                'denyCallback' => function () {
+                    die('Доступ запрещен!');
+                },
+                'rules' => [
+                    [
+                        'allow'   => true,
+                        'roles'   => Module::accessRoles,
                     ],
                 ],
-                /*'access' => [
-                    'class' => AccessControl::class,
-                    'rules' => [
-                        [
-                            'roles' => ['admin','superadmin'], // Правило для admin и superadmin.
-                        ],
-                     ],
-                    ],*/
-            ]
+            ],
+        ];
 
-        );
     }
 
     /**
@@ -144,10 +140,6 @@ class CategoryController extends Controller
 
         throw new NotFoundHttpException('The requested page does not exist.');
     }
-    public function clearCurrentCategory($id)
-    {
 
-       // FaqCategory::deleteAll(['parent_id'=>$this->id]);
-    }
 
 }

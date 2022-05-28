@@ -2,6 +2,7 @@
 
 /* @var $this yii\web\View */
 
+use app\kacharin\faq\widgets\faqWidget\FaqWidget;
 use yii\helpers\Html;
 
 $this->title = 'About';
