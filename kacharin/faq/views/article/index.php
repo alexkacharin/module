@@ -28,9 +28,10 @@ $model = new FaqArticle();
         'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-            'Категории' => 'categoryList',
+            'categoryList',
             'title',
             'content:html',
+            'status',
             [
                 'class' => ActionColumn::className(),
 				'header'=>'Кнопки действия',

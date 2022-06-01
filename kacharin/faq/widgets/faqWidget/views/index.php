@@ -1,32 +1,19 @@
+
 <?php
 
-
-use app\assets\AppAsset;
-
+use yii\widgets\ActiveForm;
+use yii\widgets\Pjax;
 use app\kacharin\faq\assets\FaqAsset;
+use yii\helpers\Html;
 use app\kacharin\faq\componets\BootstrapLinkPager;
-use app\kacharin\faq\models\FaqArticle;
-use app\kacharin\faq\models\FaqArticletocategory;
-use app\kacharin\faq\widgets\faqWidget\views\FaqWidget;
-use pistol88\tree\widgets\Tree;
-use yii\bootstrap4\Button;
-use yii\bootstrap4\Menu;
-use yii\bootstrap4\Nav;
-use yii\bootstrap4\NavBar;
-use yii\data\Pagination;
-use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
 use yii\web\View;
-use yii\widgets\LinkPager;
-
-use yii\helpers\Html;
-use yii\bootstrap4\ActiveForm;
-//Tree::widget(['model' => $model,'updateUrl' => '/faq/article/category']);
-FaqAsset::register($this);
 $request = Yii::$app->request;
 ?>
-
+<code class="php"><?php Pjax::begin(); ?>
+<div class="code-ajax">
 <div>
+    <?php FaqAsset::register($this);?>
     <?php if (Yii::$app->user->can('admin')||Yii::$app->user->can('superadmin')): ?>
     <?= Html::a('Вопросник', ['/faq/article'], ['class'=>'btn btn-primary']) ?>
     <?= Html::a('Категории', ['/faq/category'], ['class'=>'btn btn-primary']) ?>
@@ -35,52 +22,67 @@ $request = Yii::$app->request;
     <?php
     $model = new \app\kacharin\faq\models\FaqCategory();
     $model2 = new \app\kacharin\faq\models\FaqArticle();
-    $list = $model::find()->asArray()->all();
-    $arr = $model::buildArray($list);
-    $arr = $model::treeBuild($arr);
+
     echo "<div class='container'>";
+    $arr = $model->getTreeCategory($request->absoluteUrl);
+    echo "<pre>";
     print_r($arr);
+    echo "</pre>";
     echo "</div>";
     ?>
 
-    <body>
     <?php
     $this->registerJs(
-        "$('.main-list li').on('click', function(e) {
-    e.stopPropagation();
+        " $('.main-list li').on('click', function(e) {
     var subList = $(this).children('.sub-list');
-
     if (subList.hasClass('open')) {
-        $(this).find('.sub-list').removeClass('open');
+    $(this).find('.sub-list').removeClass('open');
     } else {
-        subList.addClass('open');
+    subList.addClass('open');
     }
     });
     ", View::POS_READY,
         'my-button-handler'
     );
     ?>
+    <body>
+
+    <script>
+        var person ;
+        function myFunction()
+        {
+            $.ajax({
+                url: '<?php echo Yii::$app->request->baseUrl. '/faq/article/search' ?>',
+                type: 'post',
+                data: {
+                    searchname: $("#searchname").val(),
+                    url: location.href,
+                    _csrf : '<?=Yii::$app->request->getCsrfToken()?>'
+                },
+                dataType: "json",
+                success: function (data) {
+                    person =  JSON.stringify(data.search)
+                    person = JSON.parse(person)
+                    console.log(data.url)
+                    $('#listView').html(person);
+                }
+
+            });
+
+        }
+
+    </script>
 
     <div class="container">
-        <form method="get" action="<?= Url::to(['faq/article/search']); ?>" class="pull-right">
-            <div class="input-group">
-                <input type="text" name="query" class="form-control" placeholder="Поиск по статьям">
-                <div class="input-group-btn">
-                    <button class="btn btn btn-secondary" type="submit">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-magic" viewBox="0 0 16 16">
-                            <path d="M9.5 2.672a.5.5 0 1 0 1 0V.843a.5.5 0 0 0-1 0v1.829Zm4.5.035A.5.5 0 0 0 13.293 2L12 3.293a.5.5 0 1 0 .707.707L14 2.707ZM7.293 4A.5.5 0 1 0 8 3.293L6.707 2A.5.5 0 0 0 6 2.707L7.293 4Zm-.621 2.5a.5.5 0 1 0 0-1H4.843a.5.5 0 1 0 0 1h1.829Zm8.485 0a.5.5 0 1 0 0-1h-1.829a.5.5 0 0 0 0 1h1.829ZM13.293 10A.5.5 0 1 0 14 9.293L12.707 8a.5.5 0 1 0-.707.707L13.293 10ZM9.5 11.157a.5.5 0 0 0 1 0V9.328a.5.5 0 0 0-1 0v1.829Zm1.854-5.097a.5.5 0 0 0 0-.706l-.708-.708a.5.5 0 0 0-.707 0L8.646 5.94a.5.5 0 0 0 0 .707l.708.708a.5.5 0 0 0 .707 0l1.293-1.293Zm-3 3a.5.5 0 0 0 0-.706l-.708-.708a.5.5 0 0 0-.707 0L.646 13.94a.5.5 0 0 0 0 .707l.708.708a.5.5 0 0 0 .707 0L8.354 9.06Z"></path>
-                        </svg>
-                    </button>
-                </div>
-            </div>
-        </form>
-    </div>
-    <div class="container">
+        <div class="d7">
+            <input type="text" value ="" name="searchname" id="searchname" class="search">
+            <button onclick="myFunction()">Search</button>
+        </div>
+<div id="listView">
+
      <?php foreach($articles as $article):?>
-           <article class="post">
-
+           <article class="post" >
                <div class="list-group w-100">
-
                    <div  data-mdb-toggle="collapse" aria-expanded="false"
                       aria-controls="shortExampleAnswer1collapse" class="list-group-item list-group-item-action">
                        <div class="d-flex w-100 justify-content-between">
@@ -125,13 +127,12 @@ $request = Yii::$app->request;
                           foreach($models as $r)
                           {
                               echo "<a href='";
-                              echo Url::to(['/faq/article/category?id='.$r["id"].'.']);
+                              echo Url::to(['/faq/article/category?id='.$r["id"].'.&url='.$request->absoluteUrl]);
                               echo " '> $r->title</a>";
                               echo "<br>";
                           }
 
                        }
-
                        ?>
 
                        <p>
@@ -144,6 +145,7 @@ $request = Yii::$app->request;
                    </div>
 
                </div>
+
                                 <?php endforeach; ?>
 
 
@@ -166,3 +168,7 @@ $request = Yii::$app->request;
     </body>
 
 </div>
+</div>
+</div>
+<?php Pjax::end(); ?>
+</code>

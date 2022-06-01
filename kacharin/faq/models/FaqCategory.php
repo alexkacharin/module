@@ -179,7 +179,7 @@ class FaqCategory extends \yii\db\ActiveRecord
         }
         return $return;
     }
-    public static function treeBuild($items)
+    public static function treeBuild($items,$request)
     {
         $return = '';
         foreach($items as $item) {
@@ -187,13 +187,11 @@ class FaqCategory extends \yii\db\ActiveRecord
                 $return .= '<ul class="main-list" style="list-style-type:none;">';
                 $return .= '<li>';
                 $return .= '<a href="';
-
-                $return .= Url::to(['/faq/article/category?id='.$item['id'].'.']);
+                $return .= Url::to(['/faq/article/category?id='.$item['id'].'.&url='.$request]);
                 $return .= '">';
                 $return .= $item['title'];
                 $return .= '</a>';
-                $return .= FaqCategory::treeBuild($item['childs']);
-
+                $return .= FaqCategory::treeBuild($item['childs'],$request);
                 $return .= '</li>';
                 $return .= '</ul>';
             }
@@ -201,18 +199,27 @@ class FaqCategory extends \yii\db\ActiveRecord
                 $return .= '<ul class="sub-list ">';
                 $return .= '<li style="list-style-type:none;">';
                 $return .= '<a href="';
-                $return .= Url::to(['/faq/article/category?id='.$item['id'].'.']);
+                $return .= Url::to(['/faq/article/category?id='.$item['id'].'.&url='.$request]);
                 $return .= '">';
                 $return .= $item['title'];
                 $return .= '</a>';
-                $return .= FaqCategory::treeBuild($item['childs']);
 
+                $return .= FaqCategory::treeBuild($item['childs'],$request);
                 $return .= '</li>';
                 $return .= '</ul>';
             }
 
         }
+
         return $return;
+    }
+    public function getTreeCategory($request)
+    {
+        $model = new FaqCategory();
+        $list = $model::find()->asArray()->all();
+        $arr = $model::buildArray($list);
+        $arr = $model::treeBuild($arr,$request);
+        return $arr;
     }
 }
 

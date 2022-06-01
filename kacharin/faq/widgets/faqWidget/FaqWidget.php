@@ -4,6 +4,7 @@
 namespace app\kacharin\faq\widgets\faqWidget;
 
 use app\kacharin\faq\models\FaqArticle;
+use Yii;
 use yii\base\BaseObject;
 use yii\base\Widget;
 use yii\data\Pagination;
@@ -21,6 +22,7 @@ class FaqWidget extends Widget
 
     public function run()
     {
+
         if($this->articles) {
             $articles = $this->articles;
         }else
@@ -36,4 +38,5 @@ class FaqWidget extends Widget
             'pagination' => $pagination,
         ]);
     }
+
 }

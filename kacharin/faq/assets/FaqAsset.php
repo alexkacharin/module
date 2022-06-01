@@ -10,6 +10,7 @@ class FaqAsset extends AssetBundle
 
     public $css = [
         'css/category.css',
+        'css/search.css',
     ];
     public $js = [
         'js/admin.js',

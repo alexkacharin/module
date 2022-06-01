@@ -2,17 +2,24 @@
     display: none;
     transition: max-height 1s ease-out;
 }
-
+.noLink {
+    pointer-events: none;
+}
 .sub-list.open {
     display: block;
 }
 .main-list ul {
     counter-reset: li;
     margin: 0;
-    font-family: 'Didact Gothic', sans-serif;
 
     /*подключаем через Google Web Fonts*/
 }
+.code-ajax
+{
+    font-size: 16px;
+    font-family: Georgia, serif;
+}
+
 .main-list li:before {
     counter-increment: li;
     content: counters(li, ".") ". ";
@@ -45,4 +52,3 @@
 .sub-list>li:hover:before {
     background: #215f56;
 }
-

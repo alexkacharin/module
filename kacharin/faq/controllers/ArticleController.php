@@ -55,7 +55,7 @@ class ArticleController extends Controller
 
         $searchModel = new FaqArticleSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
-        $pagination = 3;
+        $pagination = 1;
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
@@ -180,27 +180,40 @@ class ArticleController extends Controller
     /**
      * Результаты поиска по каталогу товаров
      */
-    public function actionSearch($query = '') {
-        $array = (new FaqArticle())->getSearchResult($query);
+    public function actionSearch() {
+        if (Yii::$app->request->isAjax) {
+            $data = Yii::$app->request->post();
+            $search = $data['searchname'];
+            $array = (new FaqArticle())->getSearchResult($search);
+            $articles = FaqArticle::findAll($array);
+            $pagination = new Pagination(['totalCount' => count($articles)]);
+            \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+            $arrays =  (new FaqArticle())->ad($articles,$data['url']);
+            return [
+                'search' => $arrays,
+                'url' => $data['url'],
+            ];
+        }
+       /*
         $articles = FaqArticle::findAll($array);
         $pagination = new Pagination(['totalCount' => count($articles)]);
-        return $this->render('../../widgets/faqWidget/views/index', [
-            'articles' => $articles,
-            'pagination' => $pagination,
-        ]);
+        var_dump($query);
+        return $this->renderAjax('../../widgets/faqWidget/views/index', [
+                'articles' => $articles,
+                'pagination' => $pagination
+            ]);
+*/
     }
 
-    public function actionCategory($id) {
+    public function actionCategory($id = 0,$url) {
         $array = Yii::$app->db->createCommand('SELECT * FROM faq_article_to_faq_categories WHERE category_id = :id',['id' => $id])->queryAll();
         $result = ArrayHelper::getColumn($array,'article_id');
         $articles = FaqArticle::findAll($result);
         $pagination = new Pagination(['totalCount' => count($articles)]);
-        Yii::$app->view->params['customParam'] = 'customValue';
-         return $this->render('../../widgets/faqWidget/views/index', [
-             'articles' => $articles,
-             'pagination' => $pagination,
-         ]);
-
+        return ($this->redirect($url)&&$this->renderAjax('../../widgets/faqWidget/views/index', [
+                'articles' => $articles,
+                'pagination' => $pagination
+            ]));
     }
     public function actionDeleted($id,$url) {
         Yii::$app->db->createCommand('DELETE FROM faq_article WHERE id = :id',['id' => $id])->queryAll();

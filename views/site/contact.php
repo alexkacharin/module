@@ -68,5 +68,4 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?php endif; ?>
 </div>
-<?php $someModel =  FaqArticle::find()->where(['status' => 1])?>
-<?= FaqWidget::widget(['articles' => $someModel]) ?>
+<?= FaqWidget::widget() ?>
